@@ -1,23 +1,22 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .serializers import FuncionarioInputSerializer, FuncionarioOutputSerializer
-from .services import criar_funcionario
+from rest_framework import viewsets
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
-class FuncionarioCreateView(APIView):
-    
-    def post(self, request):
-        serializer = FuncionarioInputSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+from .pagination import StandardResultsSetPagination
+from .models import Funcionario
+from .serializers import FuncionarioOutputSerializer
+from .filters import FuncionarioFilter
 
-        try:
-            novo_funcionario = criar_funcionario(
-                **serializer.validated_data
-            )
-            
-            output = FuncionarioOutputSerializer(novo_funcionario)
-            
-            return Response(output.data, status=status.HTTP_201_CREATED)
+class FuncionarioViewSet(viewsets.ModelViewSet):
+    queryset = Funcionario.objects.all()
+    serializer_class = FuncionarioOutputSerializer
+    pagination_class = StandardResultsSetPagination
 
-        except ValueError as e:
-            return Response({"erro": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    filter_backends = [
+        DjangoFilterBackend,
+        SearchFilter,
+        OrderingFilter
+    ]
+
+    filterset_class = FuncionarioFilter
+    ordering_fields = ['id', 'nome', 'sobrenome', 'cargo', 'ativo']

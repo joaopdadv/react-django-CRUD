@@ -1,6 +1,10 @@
-from django.urls import path
-from .views import FuncionarioCreateView
+from rest_framework.routers import DefaultRouter
+from .views import FuncionarioViewSet
+from django.urls import path, include
+
+router = DefaultRouter()
+router.register(r'', FuncionarioViewSet, basename='funcionarios')
 
 urlpatterns = [
-    path('', FuncionarioCreateView.as_view(), name='criar-funcionario'),
+    path('', include(router.urls)),
 ]
