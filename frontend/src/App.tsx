@@ -1,8 +1,12 @@
-import './App.css'
+import Funcionarios from './components/funcionarios/Funcionarios'
+import Navbar from './components/global/Navbar'
 
 function App() {
   return (
-    <p>sssss</p>
+    <div className="flex min-h-screen flex-col">
+      <Navbar />
+      <Funcionarios />
+    </div>
   )
 }
 
