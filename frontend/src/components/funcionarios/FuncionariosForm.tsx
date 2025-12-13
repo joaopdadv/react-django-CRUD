@@ -18,6 +18,7 @@ import type { Funcionario, FuncionarioRequest } from '@/types/funcionario';
 import { funcionariosService } from '@/services/funcionariosService';
 import { toast } from 'sonner';
 import { formatErrorMessages } from '@/utils/formatErrors';
+import { useFuncionarios } from '@/context/funcionariosContext';
 
 const formSchema = z.object({
     nome: z.string().min(2, { message: "Nome deve ter pelo menos 2 caracteres." }).max(50, { message: "Nome deve ter no máximo 50 caracteres." }),
@@ -43,6 +44,8 @@ const FuncionariosForm: React.FC<Props> = ({ funcionario }) => {
             ativo: true,
         },
     })
+    const [open, setOpen] = React.useState(false);
+    const { reload } = useFuncionarios();
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
 
@@ -51,9 +54,10 @@ const FuncionariosForm: React.FC<Props> = ({ funcionario }) => {
         if (funcionario) {
             // update
         } else {
-            funcionariosService.create(body).then((data) => {
-                console.log('Funcionário criado com sucesso:', data);
-                form.reset();
+            funcionariosService.create(body).then(() => {
+                toast.success('Funcionário criado com sucesso!');
+                handleOpenChange(false);
+                reload();
             }).catch((error) => {
                 toast.error(formatErrorMessages(error.response.data));
             });
@@ -61,12 +65,13 @@ const FuncionariosForm: React.FC<Props> = ({ funcionario }) => {
 
     }
 
-    const handleClose = () => {
+    const handleOpenChange = (isOpen: boolean) => {
+        setOpen(isOpen);
         form.reset();
     };
 
     return (
-        <Dialog onOpenChange={handleClose}>
+        <Dialog open={open} onOpenChange={(e) => { handleOpenChange(e) }}>
             <DialogTrigger asChild>
                 <Button className='border-2 bg-yellow-500'>Criar</Button>
             </DialogTrigger>

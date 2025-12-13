@@ -7,8 +7,8 @@ import { FuncionariosProvider } from "@/context/funcionariosContext";
 const Funcionarios: React.FC = () => {
     return (
         <FuncionariosProvider>
-            <div className="w-full flex-1 ">
-                <div className="flex flex-row items-center justify-between w-full p-10">
+            <div className="w-full flex-1 h-full  flex flex-col">
+                <div className="flex flex-row items-center justify-between w-full p-10 ">
                     <h2 className="text-3xl font-medium">Funcionários</h2>
                     <div className="flex items-center gap-4">
                         <FuncionariosForm />

@@ -44,33 +44,37 @@ const FuncionariosTable: React.FC<FuncionariosTableProps> = () => {
     }, [refresh, page, pageSize]);
 
     return (
-        <div className='w-[90%] mx-auto'>
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead className="w-[120px]">ID</TableHead>
-                        <TableHead>Nome</TableHead>
-                        <TableHead>CPF</TableHead>
-                        <TableHead>Email</TableHead>
-                        <TableHead>Cargo</TableHead>
-                        <TableHead className="text-right">Status</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-
-                    {funcionarios?.results?.map((f) => (
-                        <TableRow key={String(f.id)}>
-                            <TableCell className="font-medium">{f.id ?? '-'}</TableCell>
-                            <TableCell>{f.nome ?? '-'}</TableCell>
-                            <TableCell>{f.sobrenome ?? '-'}</TableCell>
-                            <TableCell>{f.cpf ? f.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : '-'}</TableCell>
-                            <TableCell>{f.cargo ?? '-'}</TableCell>
-                            <TableCell>{f.ativo ? 'Ativo' : 'Inativo'}</TableCell>
+        <div className='w-[90%] mx-auto h-full flex flex-col flex-1 py-4'>
+            <div className='flex-1 overflow-auto'>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[120px]">ID</TableHead>
+                            <TableHead>Nome</TableHead>
+                            <TableHead>CPF</TableHead>
+                            <TableHead>Email</TableHead>
+                            <TableHead>Cargo</TableHead>
+                            <TableHead className="text-right">Status</TableHead>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-            <FuncionariosPagination currentPage={page} lastPage={Math.ceil(funcionarios.count / pageSize)} />
+                    </TableHeader>
+                    <TableBody>
+
+                        {funcionarios?.results?.map((f) => (
+                            <TableRow key={String(f.id)}>
+                                <TableCell className="font-medium">{f.id ?? '-'}</TableCell>
+                                <TableCell>{f.nome ?? '-'}</TableCell>
+                                <TableCell>{f.sobrenome ?? '-'}</TableCell>
+                                <TableCell>{f.cpf ? f.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : '-'}</TableCell>
+                                <TableCell>{f.cargo ?? '-'}</TableCell>
+                                <TableCell>{f.ativo ? 'Ativo' : 'Inativo'}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </div>
+            <div className='py-4'>
+                <FuncionariosPagination currentPage={page} lastPage={Math.ceil(funcionarios.count / pageSize)} />
+            </div>
         </div>
     );
 };
