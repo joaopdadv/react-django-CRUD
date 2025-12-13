@@ -3,11 +3,12 @@ import api from './api';
 import type { Page } from '@/types/pagination';
 
 export const funcionariosService = {
-    getAll: async (page: number, pageSize: number): Promise<Page<Funcionario>> => {
+    getAll: async (page: number, pageSize: number, ordering: string): Promise<Page<Funcionario>> => {
         const response = await api.get<Page<Funcionario>>('/funcionarios/', {
             params: {
                 page,
                 page_size: pageSize,
+                ordering,
             },
         });
         return response.data;

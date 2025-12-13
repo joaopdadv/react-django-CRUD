@@ -27,6 +27,7 @@ import { ScrollArea } from '../ui/scroll-area';
 import { truncateText } from '@/utils/truncateText';
 import { TooltipContent } from '@radix-ui/react-tooltip';
 import FuncionariosTableActions from './FuncionariosTableActions';
+import SortableHead from '../global/SortableHeader';
 
 interface FuncionariosTableProps { }
 
@@ -37,15 +38,15 @@ const FuncionariosTable: React.FC<FuncionariosTableProps> = () => {
         previous: null,
         results: [],
     });
-    const { refresh, page, pageSize } = useFuncionarios();
+    const { refresh, page, pageSize, ordering, setOrdering } = useFuncionarios();
 
     useEffect(() => {
-        funcionariosService.getAll(page, pageSize).then((data) => {
+        funcionariosService.getAll(page, pageSize, ordering).then((data) => {
             setFuncionarios(data);
         }).catch(() => {
             toast.error('Erro ao carregar funcionários.');
         });
-    }, [refresh, page, pageSize]);
+    }, [refresh, page, pageSize, ordering]);
 
     return (
         <div className='w-[90%] mx-auto h-full flex flex-col flex-1 py-4'>
@@ -53,11 +54,31 @@ const FuncionariosTable: React.FC<FuncionariosTableProps> = () => {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="w-[120px]">ID</TableHead>
-                            <TableHead>Nome</TableHead>
+                            <SortableHead
+                                label="ID"
+                                field="id"
+                                currentOrder={ordering}
+                                setOrdering={setOrdering}
+                            />
+                            <SortableHead
+                                label="Nome"
+                                field="nome"
+                                currentOrder={ordering}
+                                setOrdering={setOrdering}
+                            />
                             <TableHead>CPF</TableHead>
-                            <TableHead>Cargo</TableHead>
-                            <TableHead>Status</TableHead>
+                            <SortableHead
+                                label="Cargo"
+                                field="cargo"
+                                currentOrder={ordering}
+                                setOrdering={setOrdering}
+                            />
+                            <SortableHead
+                                label="Status"
+                                field="ativo"
+                                currentOrder={ordering}
+                                setOrdering={setOrdering}
+                            />
                             <TableHead></TableHead>
                         </TableRow>
                     </TableHeader>

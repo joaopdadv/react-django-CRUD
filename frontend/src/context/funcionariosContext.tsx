@@ -8,7 +8,8 @@ type FuncionariosContextValue = {
     resetPage: () => void;
     changePage: (page: number, lastPage: number) => Promise<number>;
     changePageSize: (size: number) => void;
-
+    ordering: string;
+    setOrdering: (order: string) => void;
 };
 
 const FuncionariosContext = createContext<FuncionariosContextValue | undefined>(undefined);
@@ -17,6 +18,7 @@ export const FuncionariosProvider: React.FC<React.PropsWithChildren> = ({ childr
     const [refresh, setRefresh] = useState<boolean>(false);
     const [page, setPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
+    const [ordering, setOrdering] = useState<string>("id");
 
     const changePage = (newPage: number, lastPage: number): Promise<number> => {
         if (newPage >= 1 && newPage <= lastPage) {
@@ -38,7 +40,7 @@ export const FuncionariosProvider: React.FC<React.PropsWithChildren> = ({ childr
     }, []);
 
     return (
-        <FuncionariosContext.Provider value={{ refresh, reload, page, pageSize, resetPage, changePage, changePageSize }}>
+        <FuncionariosContext.Provider value={{ refresh, reload, page, pageSize, resetPage, changePage, changePageSize, ordering, setOrdering }}>
             {children}
         </FuncionariosContext.Provider>
     );
