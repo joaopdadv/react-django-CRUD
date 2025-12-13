@@ -26,6 +26,7 @@ import FuncionariosPagination from './FuncionariosPagination';
 import { ScrollArea } from '../ui/scroll-area';
 import { truncateText } from '@/utils/truncateText';
 import { TooltipContent } from '@radix-ui/react-tooltip';
+import FuncionariosTableActions from './FuncionariosTableActions';
 
 interface FuncionariosTableProps { }
 
@@ -57,6 +58,7 @@ const FuncionariosTable: React.FC<FuncionariosTableProps> = () => {
                             <TableHead>CPF</TableHead>
                             <TableHead>Cargo</TableHead>
                             <TableHead>Status</TableHead>
+                            <TableHead></TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -68,6 +70,9 @@ const FuncionariosTable: React.FC<FuncionariosTableProps> = () => {
                                 <TableCell>{f.cpf ? f.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : '-'}</TableCell>
                                 <TableCell><p>{f.cargo ? truncateText(f.cargo, 20) : '-'}</p></TableCell>
                                 <TableCell>{f.ativo ? 'Ativo' : 'Inativo'}</TableCell>
+                                <TableCell>
+                                    <FuncionariosTableActions funcionario={f} />
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

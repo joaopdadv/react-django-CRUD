@@ -3,6 +3,7 @@ import FuncionariosSearch from "./FuncionariosSearch";
 import FuncionariosTable from "./FuncionariosTable";
 import FuncionariosForm from "./FuncionariosForm";
 import { FuncionariosProvider } from "@/context/funcionariosContext";
+import { Button } from "../ui/button";
 
 const Funcionarios: React.FC = () => {
     return (
@@ -11,7 +12,9 @@ const Funcionarios: React.FC = () => {
                 <div className="flex flex-row items-center justify-between w-full p-10 ">
                     <h2 className="text-3xl font-medium">Funcionários</h2>
                     <div className="flex items-center gap-4">
-                        <FuncionariosForm />
+                        <FuncionariosForm>
+                            <Button className='border-2 bg-yellow-600'>Criar</Button>
+                        </FuncionariosForm>
                         <FuncionariosSearch />
                     </div>
                 </div>

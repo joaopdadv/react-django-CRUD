@@ -30,18 +30,20 @@ const formSchema = z.object({
 
 type Props = {
     funcionario?: Funcionario;
+    children: React.ReactNode;
+    readonly?: boolean;
 };
 
-const FuncionariosForm: React.FC<Props> = ({ funcionario }) => {
+const FuncionariosForm: React.FC<Props> = ({ funcionario, children, readonly = false }) => {
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            nome: "",
-            sobrenome: "",
-            cpf: "",
-            cargo: "",
-            ativo: true,
+            nome: funcionario?.nome || "",
+            sobrenome: funcionario?.sobrenome || "",
+            cpf: funcionario?.cpf || "",
+            cargo: funcionario?.cargo || "",
+            ativo: funcionario ? !!funcionario?.ativo : true,
         },
     })
     const [open, setOpen] = React.useState(false);
@@ -52,7 +54,13 @@ const FuncionariosForm: React.FC<Props> = ({ funcionario }) => {
         const body = values as FuncionarioRequest;
 
         if (funcionario) {
-            // update
+            funcionariosService.update(funcionario.id, body).then(() => {
+                toast.success('Funcionário atualizado com sucesso!');
+                handleOpenChange(false);
+                reload();
+            }).catch((error) => {
+                toast.error(formatErrorMessages(error.response.data));
+            });
         } else {
             funcionariosService.create(body).then(() => {
                 toast.success('Funcionário criado com sucesso!');
@@ -73,11 +81,17 @@ const FuncionariosForm: React.FC<Props> = ({ funcionario }) => {
     return (
         <Dialog open={open} onOpenChange={(e) => { handleOpenChange(e) }}>
             <DialogTrigger asChild>
-                <Button className='border-2 bg-yellow-500'>Criar</Button>
+                {children}
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Novo Funcionário</DialogTitle>
+                    {
+                        readonly && <DialogTitle>Detalhes</DialogTitle>
+                    }
+                    {
+                        !readonly &&
+                        <DialogTitle>{funcionario ? "Editar Funcionário" : "Novo Funcionário"}</DialogTitle>
+                    }
                 </DialogHeader>
                 <DialogClose asChild>
                     <XIcon className="absolute top-4 right-4 size-4 cursor-pointer hover:opacity-80" />
@@ -91,7 +105,7 @@ const FuncionariosForm: React.FC<Props> = ({ funcionario }) => {
                                 <FormItem>
                                     <FormLabel>Nome</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Informe o nome" {...field} />
+                                        <Input readOnly={readonly} disabled={readonly} placeholder="Informe o nome" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -104,7 +118,7 @@ const FuncionariosForm: React.FC<Props> = ({ funcionario }) => {
                                 <FormItem>
                                     <FormLabel>Sobrenome</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Informe o sobrenome" {...field} />
+                                        <Input readOnly={readonly} disabled={readonly} placeholder="Informe o sobrenome" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -118,6 +132,8 @@ const FuncionariosForm: React.FC<Props> = ({ funcionario }) => {
                                     <FormLabel>CPF</FormLabel>
                                     <FormControl>
                                         <Input
+                                            readOnly={readonly}
+                                            disabled={readonly}
                                             placeholder="Informe o CPF"
                                             {...field}
                                             onChange={(e) => {
@@ -138,7 +154,7 @@ const FuncionariosForm: React.FC<Props> = ({ funcionario }) => {
                                 <FormItem>
                                     <FormLabel>Cargo</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Informe o cargo" {...field} />
+                                        <Input readOnly={readonly} disabled={readonly} placeholder="Informe o cargo" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -150,14 +166,17 @@ const FuncionariosForm: React.FC<Props> = ({ funcionario }) => {
                             render={({ field }) => (
                                 <FormItem className="flex flex-row items-center">
                                     <FormControl>
-                                        <input type="checkbox" checked={field.value} onChange={field.onChange} />
+                                        <input readOnly={readonly} disabled={readonly} type="checkbox" checked={field.value} onChange={field.onChange} />
                                     </FormControl>
                                     <FormLabel className="mt-0!">Ativo</FormLabel>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit">Salvar</Button>
+                        {
+                            !readonly &&
+                            <Button type="submit">Salvar</Button>
+                        }
                     </form>
                 </Form>
             </DialogContent>
