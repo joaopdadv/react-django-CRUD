@@ -116,10 +116,10 @@ const FuncionariosForm: React.FC<Props> = ({ funcionario }) => {
                                             placeholder="Informe o CPF"
                                             {...field}
                                             onChange={(e) => {
-                                                const value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+                                                const value = e.target.value.replace(/\D/g, '');
                                                 field.onChange(value);
                                             }}
-                                            value={field.value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')} // Format CPF
+                                            value={field.value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')}
                                         />
                                     </FormControl>
                                     <FormMessage />

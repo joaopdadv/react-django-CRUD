@@ -1,9 +1,15 @@
 import type { Funcionario, FuncionarioRequest } from '@/types/funcionario';
 import api from './api';
+import type { Page } from '@/types/pagination';
 
 export const funcionariosService = {
-    getAll: async (): Promise<Funcionario[]> => {
-        const response = await api.get<Funcionario[]>('/funcionarios/');
+    getAll: async (page: number, pageSize: number): Promise<Page<Funcionario>> => {
+        const response = await api.get<Page<Funcionario>>('/funcionarios/', {
+            params: {
+                page,
+                page_size: pageSize,
+            },
+        });
         return response.data;
     },
 
