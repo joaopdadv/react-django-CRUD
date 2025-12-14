@@ -47,7 +47,7 @@ const FuncionariosForm: React.FC<Props> = ({ funcionario, children, readonly = f
         },
     })
     const [open, setOpen] = React.useState(false);
-    const { reload } = useFuncionarios();
+    const { reload, setFilters } = useFuncionarios();
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
 
@@ -65,7 +65,7 @@ const FuncionariosForm: React.FC<Props> = ({ funcionario, children, readonly = f
             funcionariosService.create(body).then(() => {
                 toast.success('Funcionário criado com sucesso!');
                 handleOpenChange(false);
-                reload();
+                setFilters({});
             }).catch((error) => {
                 toast.error(formatErrorMessages(error.response.data));
             });

@@ -3,20 +3,10 @@ import {
     Table,
     TableBody,
     TableCell,
-    TableFooter,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination"
 import { funcionariosService } from '@/services/funcionariosService';
 import type { Funcionario } from '@/types/funcionario';
 import type { Page } from '@/types/pagination';
@@ -25,7 +15,6 @@ import { toast } from 'sonner';
 import FuncionariosPagination from './FuncionariosPagination';
 import { ScrollArea } from '../ui/scroll-area';
 import { truncateText } from '@/utils/truncateText';
-import { TooltipContent } from '@radix-ui/react-tooltip';
 import FuncionariosTableActions from './FuncionariosTableActions';
 import SortableHead from '../global/SortableHeader';
 
@@ -38,15 +27,15 @@ const FuncionariosTable: React.FC<FuncionariosTableProps> = () => {
         previous: null,
         results: [],
     });
-    const { refresh, page, pageSize, ordering, setOrdering } = useFuncionarios();
+    const { refresh, page, pageSize, ordering, setOrdering, filters } = useFuncionarios();
 
     useEffect(() => {
-        funcionariosService.getAll(page, pageSize, ordering).then((data) => {
+        funcionariosService.getAll(page, pageSize, ordering, filters).then((data) => {
             setFuncionarios(data);
         }).catch(() => {
             toast.error('Erro ao carregar funcionários.');
         });
-    }, [refresh, page, pageSize, ordering]);
+    }, [refresh, page, pageSize, ordering, filters]);
 
     return (
         <div className='w-[90%] mx-auto h-full flex flex-col flex-1 py-4'>
@@ -98,6 +87,13 @@ const FuncionariosTable: React.FC<FuncionariosTableProps> = () => {
                         ))}
                     </TableBody>
                 </Table>
+                {
+                    funcionarios.count === 0 && (
+                        <div className='w-full flex justify-center items-center py-10'>
+                            Nenhum funcionário encontrado. Altere os filtros ou adicione um novo funcionário.
+                        </div>
+                    )
+                }
             </ScrollArea>
             <div className='py-4'>
                 <FuncionariosPagination currentPage={page} lastPage={Math.ceil(funcionarios.count / pageSize)} />

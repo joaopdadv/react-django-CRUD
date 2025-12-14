@@ -20,7 +20,7 @@ const SortableHead = ({ label, field, currentOrder, setOrdering }: any) => {
         <TableHead>
             <Button
                 variant="ghost"
-                className="h-8 p-0 hover:bg-transparent font-bold"
+                className="h-8 px-0! m-0 w-max hover:bg-transparent font-bold "
                 onClick={() => handleSort(field)}
             >
                 {label}
