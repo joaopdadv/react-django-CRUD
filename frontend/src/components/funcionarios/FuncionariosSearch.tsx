@@ -41,7 +41,7 @@ const FuncionariosSearch: React.FC = () => {
             ativo: 3,
         },
     })
-    const { filters, setFilters } = useFuncionarios();
+    const { setFilters } = useFuncionarios();
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         const newFilters: FuncionariosFilters = {
