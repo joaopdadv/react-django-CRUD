@@ -49,3 +49,7 @@
     ```bash
     deactivate
     ```
+
+## IMPORTANTE:
+
+ao rodar o projeto, api deve estar rodando na porta :8000

@@ -15,3 +15,7 @@
     ```bash
     npm run dev
     ```
+
+## IMPORTANTE:
+
+ao rodar o projeto, aplicação deve estar rodando na porta :5173 (vite)
